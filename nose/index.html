@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.cdnfonts.com/css/bebas-neue" rel="stylesheet">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>BALD-HEAD</h1>
+    <canvas id="canvas"></canvas>
+    <h3>By Tenarse</h3>
+</body>
+
+<style>
+    canvas {
+        position: absolute;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        left: 50%;
+        border: 5px solid red;
+        box-shadow: 10px 10px 30px red;
+    }
+
+    h1 {
+        font-size: 7rem;
+        text-transform: uppercase;
+        font-family: 'Bebas Neue';
+        line-height: 5.9rem;
+        margin-top: 20px;
+        color: red;
+        text-align: center;
+    }
+
+    h3 {
+        font-size: 2rem;
+        text-transform: uppercase;
+        font-family: 'Bebas Neue';
+        margin-top: 750px;
+        color: red;
+        text-align: center;
+    }
+
+    body {
+        background-color: black;
+    }
+</style>
+<script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    ctx.canvas.width = window.innerWidth / 2 * 1.5;
+    ctx.canvas.height = window.innerHeight / 2 * 1.5;
+    var teclap = 0;
+    var sprite = new Image();
+    var csprite = new Image();
+    csprite.src = "Zombie.png";
+    var back = new Image();
+    back.src = "try2.png";
+    sprite.src = "a2.png";
+    var indiceX = 0, indiceY = 0;
+    var sprX = canvas.width / 2, sprY = canvas.height / 2;
+    var cindiceX = 0, cindiceY = 0;
+    var csprX = 0, csprY = 0;
+    var start;
+    var currentFrame = 0;
+    var sheetWidth = 900;
+    var sheetHeight = 405;
+    var cols = 9;
+    var rows = 4;
+    var width = sheetWidth / cols;
+    var height = sheetHeight / rows;
+    var px = sprX;
+    var py = sprY;
+    var dx = -13;
+    var dy = -13;
+    var ballRadius = 10;
+    var cw = canvas.width;
+    var ch = canvas.height;
+    var isBall = false;
+    var cont = 0;
+
+    function updateFrame() {
+        animate();
+        if (isBall == true)
+            drawB();
+        currentFrame = ++currentFrame % cols;
+        indiceX = currentFrame * width;
+        cindiceX = currentFrame * width;
+        ctx.clearRect(sprX, sprY, width, height);
+        ctx.clearRect(csprX, csprY, width, height);
+        ctx.clearRect(sprX, sprY, cw, ch);
+    }
+
+    function drawImage() {
+        updateFrame();
+        ctx.drawImage(back, -440, 0);
+        ctx.drawImage(sprite, indiceX, indiceY * 100, width, height, sprX, sprY, 75, 75);
+        ctx.drawImage(csprite, cindiceX, cindiceY * 100, width, height, csprX, csprY, 75, 75);
+        if (isBall == true) {
+            cont++;
+            if (cont == 1) {
+                px = sprX;
+                py = sprY;
+                if (csprY > sprY)
+                    dy = 15;
+                if (csprY < sprY)
+                    dy = -15;
+                if (csprX > sprX)
+                    dx = 15;
+                if (csprX < sprX)
+                    dx = -15;
+            }
+            drawBall();
+        }
+        document.onkeydown = function (e) {
+            if (e == null)
+                teclap = window.e.keyCode;
+            else {
+                teclap = e.keyCode;
+            }
+            switch (teclap) {
+                case 40: //s
+                    sprY += 15;
+                    indiceY = 2;
+                    break;
+                case 37://a
+                    sprX -= 15;
+                    indiceY = 1;
+                    break;
+                case 38://w
+                    sprY -= 15;
+                    indiceY = 0;
+                    break;
+                case 39: //d
+                    sprX += 15;
+                    indiceY = 3;
+                    break;
+                case 83: //s
+                    csprY += 15;
+                    cindiceY = 2;
+                    break;
+                case 65://a
+                    csprX -= 15;
+                    cindiceY = 1;
+                    break;
+                case 87://w
+                    csprY -= 15;
+                    cindiceY = 0;
+                    break;
+                case 68: //d
+                    csprX += 15;
+                    cindiceY = 3;
+                    break;
+                case 32:
+                    if (isBall == false)
+                        isBall = true;
+                    else
+                        isBall = false;
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+    function drawBall() {
+        ctx.beginPath();
+        console.log(sprX);
+        ctx.arc(px, py, ballRadius, 0, Math.PI * 2);
+        ctx.fillStyle = "red";
+        ctx.fill();
+        ctx.closePath();
+    }
+    function drawB() {
+        if (px + dx > cw - ballRadius || px + dx < ballRadius) {
+            dx = -dx;
+        }
+        if (py + dy > ch - ballRadius || py + dy < ballRadius) {
+            dy = -dy;
+        }
+
+        px += (dx);
+
+        py += (dy);
+    }
+
+    setInterval(function() {
+        drawImage();
+    }, 75);
+
+    function animate() {
+        cindiceX = cindiceX + 1;
+        if (cindiceX > 9)
+            cindiceX = 0;
+        //border collisionsssss
+        if (sprX > canvas.width - 60)
+            sprX = canvas.width - 60;
+        if (sprX < 0)
+            sprX = 0;
+        if (sprY > canvas.height - 60)
+            sprY = canvas.height - 60;
+        if (sprY < 0)
+            sprY = 0;
+
+        if (csprX > canvas.width - 60)
+            csprX = canvas.width - 60;
+        if (csprX < 0)
+            csprX = 0;
+        if (csprY > canvas.height - 60)
+            csprY = canvas.height - 60;
+        if (csprY < 0)
+            csprY = 0;
+    }
+</script>
+</html>
