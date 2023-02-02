@@ -81,6 +81,9 @@
     var ch = canvas.height;
     var isBall = false;
     var cont = 0;
+    var check = 0;
+    var px2, py2 = 0;
+    var dx2, dy2 = 0;
 
     function updateFrame() {
         animate();
@@ -91,7 +94,6 @@
         cindiceX = currentFrame * width;
         ctx.clearRect(sprX, sprY, width, height);
         ctx.clearRect(csprX, csprY, width, height);
-        ctx.clearRect(sprX, sprY, cw, ch);
     }
 
     function drawImage() {
@@ -99,22 +101,6 @@
         ctx.drawImage(back, -440, 0);
         ctx.drawImage(sprite, indiceX, indiceY * 100, width, height, sprX, sprY, 75, 75);
         ctx.drawImage(csprite, cindiceX, cindiceY * 100, width, height, csprX, csprY, 75, 75);
-        if (isBall == true) {
-            cont++;
-            if (cont == 1) {
-                px = sprX;
-                py = sprY;
-                if (csprY > sprY)
-                    dy = 15;
-                if (csprY < sprY)
-                    dy = -15;
-                if (csprX > sprX)
-                    dx = 15;
-                if (csprX < sprX)
-                    dx = -15;
-            }
-            drawBall();
-        }
         document.onkeydown = function (e) {
             if (e == null)
                 teclap = window.e.keyCode;
@@ -157,8 +143,8 @@
                 case 32:
                     if (isBall == false)
                         isBall = true;
-                    else
-                        isBall = false;
+                    drawBall();
+                    check++;
                     break;
                 default:
                     break;
@@ -166,14 +152,41 @@
         }
     }
     function drawBall() {
-        ctx.beginPath();
-        console.log(sprX);
-        ctx.arc(px, py, ballRadius, 0, Math.PI * 2);
-        ctx.fillStyle = "red";
-        ctx.fill();
-        ctx.closePath();
+        if (isBall == true) {
+            cont++;
+            if (cont == 1 && check == 1) {
+                px = sprX;
+                py = sprY;
+                if (csprY > sprY)
+                    dy = 15;
+                if (csprY < sprY)
+                    dy = -15;
+                if (csprX > sprX)
+                    dx = 15;
+                if (csprX < sprX)
+                    dx = -15;
+            }
+            if(check > 2){
+                px2 = sprX;
+                py2 = sprY;
+                ctx.beginPath();
+                console.log("Seundo" + px2);
+                ctx.arc(px2, py2, ballRadius, 0, Math.PI * 2);
+                ctx.fillStyle = "red";
+                ctx.fill();
+            }
+            ctx.beginPath();
+            console.log(check);
+            console.log("before" + px);
+            ctx.arc(px, py, ballRadius, 0, Math.PI * 2);
+            ctx.fillStyle = "red";
+            ctx.fill();
+        }
+
     }
     function drawB() {
+        
+        ctx.clearRect(px, py, canvas.width, canvas.height);
         if (px + dx > cw - ballRadius || px + dx < ballRadius) {
             dx = -dx;
         }
@@ -184,10 +197,26 @@
         px += (dx);
 
         py += (dy);
+
+
+        
+        ctx.clearRect(px2, py2, canvas.width, canvas.height);
+        if (px2 + dx > cw - ballRadius || px2 + dx < ballRadius) {
+            dx = -dx;
+        }
+        if (py2 + dy > ch - ballRadius || py2 + dy < ballRadius) {
+            dy = -dy;
+        }
+
+        px2 += (dx);
+
+        py2 += (dy);
     }
 
-    setInterval(function() {
+    setInterval(function () {
         drawImage();
+        if (isBall == true)
+            drawBall();
     }, 75);
 
     function animate() {
@@ -214,4 +243,5 @@
             csprY = 0;
     }
 </script>
+
 </html>
