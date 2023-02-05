@@ -12,7 +12,6 @@
 <body>
     <h1>BALD-HEAD</h1>
     <canvas id="canvas"></canvas>
-    <h3>By Tenarse</h3>
 </body>
 
 <style>
@@ -34,16 +33,6 @@
         color: red;
         text-align: center;
     }
-
-    h3 {
-        font-size: 2rem;
-        text-transform: uppercase;
-        font-family: 'Bebas Neue';
-        margin-top: 750px;
-        color: red;
-        text-align: center;
-    }
-
     body {
         background-color: black;
     }
@@ -51,14 +40,17 @@
 <script>
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
-    ctx.canvas.width = window.innerWidth / 2 * 1.5;
-    ctx.canvas.height = window.innerHeight / 2 * 1.5;
+    const ctx2 = canvas.getContext('2d');
+    ctx.canvas.width = window.innerWidth / 2 * 1.6;
+    ctx.canvas.height = window.innerHeight / 2 * 1.65;
+    console.log(ctx.canvas.width);
+    console.log(ctx.canvas.height);
     var teclap = 0;
     var sprite = new Image();
     var csprite = new Image();
     csprite.src = "Zombie.png";
     var back = new Image();
-    back.src = "try2.png";
+    back.src = "Web.png";
     sprite.src = "a2.png";
     var indiceX = 0, indiceY = 0;
     var sprX = canvas.width / 2, sprY = canvas.height / 2;
@@ -72,23 +64,10 @@
     var rows = 4;
     var width = sheetWidth / cols;
     var height = sheetHeight / rows;
-    var px = sprX;
-    var py = sprY;
-    var dx = -13;
-    var dy = -13;
-    var ballRadius = 10;
-    var cw = canvas.width;
-    var ch = canvas.height;
-    var isBall = false;
-    var cont = 0;
-    var check = 0;
-    var px2, py2 = 0;
-    var dx2, dy2 = 0;
+    var flag = true;
 
     function updateFrame() {
-        animate();
-        if (isBall == true)
-            drawB();
+        collisions();
         currentFrame = ++currentFrame % cols;
         indiceX = currentFrame * width;
         cindiceX = currentFrame * width;
@@ -98,9 +77,11 @@
 
     function drawImage() {
         updateFrame();
-        ctx.drawImage(back, -440, 0);
-        ctx.drawImage(sprite, indiceX, indiceY * 100, width, height, sprX, sprY, 75, 75);
-        ctx.drawImage(csprite, cindiceX, cindiceY * 100, width, height, csprX, csprY, 75, 75);
+        ctx.fillStyle = "blue";
+        ctx2.drawImage(back, 0, 0);
+        ctx.drawImage(sprite, indiceX, indiceY * 100, width, height, sprX, sprY, 65, 65);
+        ctx.drawImage(csprite, cindiceX, cindiceY * 100, width, height, csprX, csprY, 65, 65);
+        
         document.onkeydown = function (e) {
             if (e == null)
                 teclap = window.e.keyCode;
@@ -140,89 +121,25 @@
                     csprX += 15;
                     cindiceY = 3;
                     break;
-                case 32:
-                    if (isBall == false)
-                        isBall = true;
-                    drawBall();
-                    check++;
-                    break;
                 default:
                     break;
             }
         }
     }
-    function drawBall() {
-        if (isBall == true) {
-            cont++;
-            if (cont == 1 && check == 1) {
-                px = sprX;
-                py = sprY;
-                if (csprY > sprY)
-                    dy = 15;
-                if (csprY < sprY)
-                    dy = -15;
-                if (csprX > sprX)
-                    dx = 15;
-                if (csprX < sprX)
-                    dx = -15;
-            }
-            if(check > 2){
-                px2 = sprX;
-                py2 = sprY;
-                ctx.beginPath();
-                console.log("Seundo" + px2);
-                ctx.arc(px2, py2, ballRadius, 0, Math.PI * 2);
-                ctx.fillStyle = "red";
-                ctx.fill();
-            }
-            ctx.beginPath();
-            console.log(check);
-            console.log("before" + px);
-            ctx.arc(px, py, ballRadius, 0, Math.PI * 2);
-            ctx.fillStyle = "red";
-            ctx.fill();
-        }
 
+    function drawObject ()
+    {
+        ctx.fillRect(100, 100, 50, 50);
     }
-    function drawB() {
-        
-        ctx.clearRect(px, py, canvas.width, canvas.height);
-        if (px + dx > cw - ballRadius || px + dx < ballRadius) {
-            dx = -dx;
-        }
-        if (py + dy > ch - ballRadius || py + dy < ballRadius) {
-            dy = -dy;
-        }
-
-        px += (dx);
-
-        py += (dy);
-
-
-        
-        ctx.clearRect(px2, py2, canvas.width, canvas.height);
-        if (px2 + dx > cw - ballRadius || px2 + dx < ballRadius) {
-            dx = -dx;
-        }
-        if (py2 + dy > ch - ballRadius || py2 + dy < ballRadius) {
-            dy = -dy;
-        }
-
-        px2 += (dx);
-
-        py2 += (dy);
-    }
-
     setInterval(function () {
         drawImage();
-        if (isBall == true)
-            drawBall();
+        if(flag == false)
+            drawObject()
     }, 75);
 
-    function animate() {
-        cindiceX = cindiceX + 1;
-        if (cindiceX > 9)
-            cindiceX = 0;
+    function collisions() {
+        console.log("X " + csprX);
+        console.log("Y " + csprY);
         //border collisionsssss
         if (sprX > canvas.width - 60)
             sprX = canvas.width - 60;
@@ -232,7 +149,6 @@
             sprY = canvas.height - 60;
         if (sprY < 0)
             sprY = 0;
-
         if (csprX > canvas.width - 60)
             csprX = canvas.width - 60;
         if (csprX < 0)
@@ -241,6 +157,64 @@
             csprY = canvas.height - 60;
         if (csprY < 0)
             csprY = 0;
+
+       if((csprX > 285 && csprX <= 315) && (csprY <= 170 && csprY >= 60))
+            csprX = 315;
+        if(csprX <= 30 && (csprY >= 60 && csprY <= 135))
+            csprX = 30;
+        if((csprX > 255 && csprX < 286) && (csprY <= 135 && csprY > 60))
+            csprX = 270;   
+        if((csprX >= 30 && csprX <= 275) && (csprY >= 135 && csprY <= 150))
+            csprY = 135
+        if((csprX <= 300 && csprX >= 0) && (csprY <= 195 && csprY >= 175))
+            csprY = 195;
+
+        if((sprX > 285 && sprX <= 315) && (sprY <= 170 && sprY >= 60))
+            sprX = 315;
+        if(sprX <= 30 && (sprY >= 60 && sprY <= 135))
+            sprX = 30;
+        if((sprX > 255 && sprX < 286) && (sprY <= 135 && sprY > 60))
+            sprX = 270;   
+        if((sprX >= 30 && sprX <= 275) && (sprY >= 135 && sprY <= 150))
+            sprY = 135
+        if((sprX <= 300 && sprX >= 0) && (sprY <= 195 && sprY >= 175))
+            sprY = 195;
+            
+        
+            //Y 507 -> 520 X 165
+
+
+        if((sprX >= 405 && sprX <= 420) && (sprY >= 555 && sprY <= 570))
+        {
+            sprX = 1230;
+            sprY = 75;
+            indiceY = 1
+        }
+        if((sprX >= 165 && sprX <= 180) &&  (sprY < 555 && sprY >= 505))
+            sprX = 165;
+        if((sprX >= 195 && sprX < 465) && (sprY >= 480 && sprY <= 505))
+            sprY = 480;
+        if((sprX <= 477 && sprX >= 460) &&(sprY >= 495 && sprY <= 600))
+            sprX = 477;
+        if((sprX >= 195 && sprX <= 395) && (sprY >= 535 && sprY <= 570))
+            sprY = 555;
+        if((sprX >= 195 && sprX <= 460) && (sprY <= 627 && sprY >= 597))
+            sprY = 627;
+
+
+        if((csprX >= 390 && csprX <= 405) && (csprY >= 555 && csprY <= 570))
+            csprX = 390
+        if((csprX >= 165 && csprX <= 180) &&  (csprY < 555 && csprY >= 505))
+            csprX = 165;
+        if((csprX >= 195 && csprX < 465) && (csprY >= 480 && csprY <= 505))
+            csprY = 480;
+        if((csprX <= 477 && csprX >= 460) &&(csprY >= 495 && csprY <= 600))
+            csprX = 477;
+        if((csprX >= 195 && csprX <= 395) && (csprY >= 535 && csprY <= 570))
+            csprY = 555;
+        if((csprX >= 195 && csprX <= 460) && (csprY <= 627 && csprY >= 597))
+            csprY = 627;
+
     }
 </script>
 
