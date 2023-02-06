@@ -11,6 +11,9 @@
 
 <body>
     <h1>BALD-HEAD</h1>
+    <div id="myProgress">
+        <div id="myBar">10%</div>
+    </div>
     <canvas id="canvas"></canvas>
 </body>
 
@@ -18,7 +21,7 @@
     canvas {
         position: absolute;
         top: 50%;
-        transform: translate(-50%, -50%);
+        transform: translate(-50%, -40%);
         left: 50%;
         border: 5px solid red;
         box-shadow: 10px 10px 30px red;
@@ -36,6 +39,25 @@
     body {
         background-color: black;
     }
+    #myProgress {
+        width: 50%;
+        background-color: #ddd;
+        position: absolute;
+        top: 15%;
+        transform: translate(-50%, -50%);
+        left: 50%;
+        border-radius: 50px;
+    }
+
+#myBar {
+  width: 10%;
+  height: 30px;
+  background-color: red;
+  text-align: center;
+  line-height: 30px;
+  color: white;
+  border-radius: 50px;
+}
 </style>
 <script>
     const canvas = document.getElementById('canvas');
@@ -74,8 +96,21 @@
     var flag8 = false;
     var flag9 = false;
     var flag10 = false; 
-    var win = 0;
-
+    var win =0;
+    var elem = document.getElementById("myBar");
+    var width2 = 100;
+    var id = setInterval(frame, 10);
+    function frame() {
+      if (width2 <= 0) {
+        clearInterval(id);
+        i = 0;
+        elem.style.width = width2 + "%";
+        elem.innerHTML = width2  + "%";
+      } else {
+        elem.style.width = width2 + "%";
+        elem.innerHTML = width2  + "%";
+      }
+    }
 
     function updateFrame() {
         collisions();
@@ -88,7 +123,7 @@
 
     function drawImage() {
         updateFrame();
-        
+        ctx.fillStyle = "red";
         ctx2.drawImage(back, 0, 0);
         ctx.drawImage(sprite, indiceX, indiceY * 100, width, height, sprX, sprY, 65, 65);
         ctx.drawImage(csprite, cindiceX, cindiceY * 100, width, height, csprX, csprY, 65, 65);
@@ -117,21 +152,25 @@
                     indiceY = 3;
                     break;
                 case 83: //s
-                    csprY += 15;
+                    csprY += 20;
                     cindiceY = 2;
                     break;
                 case 65://a
-                    csprX -= 15;
+                    csprX -= 20;
                     cindiceY = 1;
                     break;
                 case 87://w
-                    csprY -= 15;
+                    csprY -= 20;
                     cindiceY = 0;
                     break;
                 case 68: //d
-                    csprX += 15;
+                    csprX += 20;
                     cindiceY = 3;
                     break;
+                case 32:
+                    if((csprX -5 == sprX || csprY -5 == sprY) || (csprX +5 == sprX || csprY +5 == sprY))
+                        width2 -= 10;
+                    
                 default:
                     break;
             }
@@ -175,37 +214,43 @@
     }, 75);
 
     function collisions() {
-        console.log(win)
+        if(flag == true && flag2 == true  && flag3 == true && flag4 == true && flag5 == true && flag6 == true && flag7 == true && flag8 == true && flag9 == true && flag10 == true)
+            console.log("WIN");
+        if(width2 == 0)
+            console.log("LOSE");
         //OBJECT1
+
         if(sprX >= 165 && sprX <= 195 && sprY <= 240 && sprY >= 210)
-        {flag = true; win += 1; return ;}
+        {flag = true;}
         //OBJECT2
         if((sprX >= 675 && sprX <= 690 && sprY >= 30 && sprY <= 75))
-        {flag2 = true; win += 1; return ;}
+        {flag2 = true;}
         //OBJECT3
         if((sprY >= 420 && sprY <= 450 && sprX == 255))
-        {flag3 = true; win += 1; return ;}
+        {flag3 = true}
         //OBJECT4
         if(sprY == 405 && sprX <= 585 && sprX >= 570)
-        {flag4 = true; win += 1; return ;}
+        {flag4 = true}
         //OBJECT5
         if(sprX == 450 && sprY >= 285 && sprY <= 315)
-        {flag5 = true; win += 1; return ;}
+        {flag5 = true;}
         //OBJECT6
         if(sprX >= 975 && sprX <= 990 && sprY >= 540 && sprY <= 570)
-        {flag6 = true; win += 1; return ;}
+        {flag6 = true;}
         //OBJECT7
         if(sprX >= 1125 && sprX <= 1140 && sprY >= 210 && sprY <= 240)
-        {flag7 = true; win += 1; return ;}
+        {flag7 = true;}
         //OBJECT8
         if(sprX >= 570 && sprX <= 585 && sprY >= 210 && sprY <= 240)
-        {flag8 = true; win += 1; return ;}
+        {flag8 = true;}
         //OBJECT9
         if(sprX >= 570 && sprX <= 600 && sprY >= 610 && sprY <= 640)
-        {flag9 = true; win += 1; return ;}
+        {flag9 = true;}
         //OBJECT10
         if(sprX >= 1020 && sprX <= 1035 && sprY >= 75 && sprY <= 90)
-        {flag10 = true; win += 1; return ;}
+        {flag10 = true;}
+
+        
         
         
 
