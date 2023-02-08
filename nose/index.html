@@ -168,9 +168,14 @@
                     cindiceY = 3;
                     break;
                 case 32:
-                    if((csprX -5 == sprX || csprY -5 == sprY) || (csprX +5 == sprX || csprY +5 == sprY))
+                    console.log("Xs " + sprX);
+                    console.log("Xc " + csprX);
+                    if((csprX -15 == sprX && (csprY -15 == sprY || csprY == sprY || csprY +15 == sprY)))
                         width2 -= 10;
-                    
+                    if((csprX +15 == sprX && (csprY +15 == sprY || csprY == sprY || csprY -15 == sprY)))
+                        width2 -= 10;
+                    if(csprY == sprY && csprX == sprX)
+                        width2 -= 10;
                 default:
                     break;
             }
