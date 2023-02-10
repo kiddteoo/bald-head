@@ -1,0 +1,59 @@
+canvas {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -40%);
+    left: 50%;
+    border: 5px solid red;
+    box-shadow: 10px 10px 30px red;
+}
+
+h1 {
+    font-size: 7rem;
+    text-transform: uppercase;
+    font-family: 'Bebas Neue';
+    line-height: 5.9rem;
+    margin-top: 20px;
+    color: red;
+    text-align: center;
+}
+.dialog_title{
+	font-size: 3rem;
+	text-transform: uppercase;
+	font-family: 'Bebas Neue';
+	color: red;
+	text-align: center;
+}
+
+body {
+    background-color: black;
+    text-transform: uppercase;
+    font-family: 'Bebas Neue';
+}
+
+#app {
+    background-color: black;
+    text-transform: uppercase;
+    font-family: 'Bebas Neue';
+}
+
+
+#myProgress {
+    width: 50%;
+    background-color: #ddd;
+    position: absolute;
+    top: 15%;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    border-radius: 50px;
+}
+
+#myBar {
+    width: 10%;
+    height: 30px;
+    background-color: red;
+    text-align: center;
+    font-size: 2rem;
+    line-height: 30px;
+    color: white;
+    border-radius: 50px;
+}
