@@ -116,15 +116,6 @@ var app = new Vue({
                         csprX += 15;
                         cindiceY = 3;
                         break;
-                    case 32:
-                    /*                     console.log("Xs " + sprX);
-                                        console.log("Xc " + csprX);
-                                        if((csprX -15 == sprX && (csprY -15 == sprY || csprY == sprY || csprY +15 == sprY)))
-                                            width2 -= 10;
-                                        if((csprX +15 == sprX && (csprY +15 == sprY || csprY == sprY || csprY -15 == sprY)))
-                                            width2 -= 10;
-                                        if(csprY == sprY && csprX == sprX)
-                                            width2 -= 10; */
                     default:
                         break;
                 }
@@ -414,5 +405,26 @@ var app = new Vue({
             if ((sprX >= 765 && sprX <= 780) && (sprY >= 330 && sprY <= 480))
                 sprX = 765;
         }
+        function startChronometer(display) {
+            var seconds = 0, minutes, hours;
+            setInterval(function () {
+              minutes = parseInt(seconds / 60, 10)
+              hours = parseInt(minutes / 60, 10);
+              minutes = minutes % 60;
+              seconds = seconds % 60;
+        
+              hours = hours < 10 ? "0" + hours : hours;
+              minutes = minutes < 10 ? "0" + minutes : minutes;
+              seconds = seconds < 10 ? "0" + seconds : seconds;
+        
+              display.textContent = hours + ":" + minutes + ":" + seconds;
+              seconds++;
+            }, 1000);
+          }
+        
+          window.onload = function () {
+            var display = document.querySelector('#crono');
+            startChronometer(display);
+          };
     }
 });

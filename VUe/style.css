@@ -7,6 +7,9 @@ canvas {
     box-shadow: 10px 10px 30px red;
 }
 
+p{
+    color: white;
+}
 h1 {
     font-size: 7rem;
     text-transform: uppercase;
